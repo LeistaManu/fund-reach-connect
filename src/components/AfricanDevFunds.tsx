@@ -13,7 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 
 type AppView = 'welcome' | 'account' | 'form' | 'redirect';
 
-const WHATSAPP_NUMBER = "254718663469"; // Placeholder number
+const WHATSAPP_NUMBER = "+255780361330"; // Placeholder number
 
 const testimonials = [
   { id: 1, key: 'testimonial1' },
