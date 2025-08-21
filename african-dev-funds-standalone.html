@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFRICAN DEV'T FUNDS - Apply for Free Development Grants</title>
+    <meta name="description" content="Apply for free development grants to support African communities. These are donations/free funds, not loans.">
+    
+    <!-- React 18 + ReactDOM via CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel Standalone for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #0F172A;
+            background-color: #F1F5F9;
+            overflow-x: hidden;
+        }
+        
+        /* Design System Variables */
+        :root {
+            --primary: #0B6B3A;
+            --primary-light: #059669;
+            --accent: #E3B341;
+            --accent-light: #F59E0B;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --surface: #FFFFFF;
+            --surface-light: #F1F5F9;
+            --border: #E2E8F0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Layout */
+        .app {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            box-shadow: var(--shadow);
+        }
+        
+        .header-left, .header-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .header-center {
+            flex: 1;
+            text-align: center;
+            margin: 0 1rem;
+        }
+        
+        .logo {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .tagline {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .icon-button {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .icon-button:hover {
+            background-color: var(--surface-light);
+        }
+        
+        /* Sidebar */
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+        
+        .sidebar-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 280px;
+            background: var(--surface);
+            transform: translateX(-100%);
+            transition: var(--transition);
+            z-index: 51;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .sidebar-content {
+            padding: 1rem;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+        
+        .sidebar-section h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 0.25rem;
+        }
+        
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: var(--radius);
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .sidebar-link:hover {
+            background-color: var(--surface-light);
+        }
+        
+        /* Main Content */
+        .main {
+            flex: 1;
+            padding: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-subtitle {
+            color: var(--text-secondary);
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            font-size: 1rem;
+            min-height: 44px;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--primary-light);
+        }
+        
+        .btn-secondary {
+            background-color: var(--accent);
+            color: var(--text-primary);
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            background-color: var(--accent-light);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover:not(:disabled) {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+        
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: var(--surface);
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(11, 107, 58, 0.1);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .form-hint {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+        
+        .form-error {
+            font-size: 0.875rem;
+            color: #EF4444;
+            margin-top: 0.25rem;
+        }
+        
+        .form-input.error, .form-select.error, .form-textarea.error {
+            border-color: #EF4444;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        
+        .checkbox {
+            margin-top: 0.25rem;
+        }
+        
+        .checkbox-label {
+            font-weight: normal;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+        
+        /* Language Selector */
+        .language-selector {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .language-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border);
+            background: var(--surface);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .language-btn.active {
+            border-color: var(--primary);
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            margin: 2rem 0;
+        }
+        
+        .testimonial {
+            background: var(--surface-light);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        /* Progress Steps */
+        .steps {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .step:not(:last-child)::after {
+            content: '';
+            width: 2rem;
+            height: 2px;
+            background: var(--border);
+            margin: 0 1rem;
+        }
+        
+        .step-number {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            background: var(--border);
+            color: var(--text-secondary);
+        }
+        
+        .step.active .step-number {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .step.completed .step-number {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .step.active .step-label {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        /* Form Navigation */
+        .form-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+        }
+        
+        /* Loading States */
+        .spinner {
+            width: 2rem;
+            height: 2rem;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding: 3rem;
+        }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem;
+            box-shadow: var(--shadow-lg);
+            z-index: 60;
+            transform: translateX(100%);
+            transition: var(--transition);
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            border-color: var(--primary);
+            background: #F0FDF4;
+        }
+        
+        .toast.error {
+            border-color: #EF4444;
+            background: #FEF2F2;
+        }
+        
+        /* Alert Box */
+        .alert {
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary);
+            background: #EFF6FF;
+        }
+        
+        .alert-content {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .alert-icon {
+            color: var(--primary);
+        }
+        
+        /* Summary */
+        .summary {
+            background: var(--surface-light);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        
+        .summary-label {
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        
+        .summary-value {
+            color: var(--text-primary);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 640px) {
+            .header {
+                padding: 0.75rem;
+            }
+            
+            .header-center {
+                margin: 0 0.5rem;
+            }
+            
+            .logo {
+                font-size: 1rem;
+            }
+            
+            .tagline {
+                font-size: 0.75rem;
+            }
+            
+            .main {
+                padding: 0.75rem;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .steps {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .step::after {
+                display: none;
+            }
+            
+            .form-nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .toast {
+                left: 1rem;
+                right: 1rem;
+                bottom: 1rem;
+                transform: translateY(100%);
+            }
+            
+            .toast.show {
+                transform: translateY(0);
+            }
+        }
+        
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        /* Focus management */
+        *:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+        
+        .icon-button:focus,
+        .btn:focus,
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(11, 107, 58, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useEffect, useCallback } = React;
+        
+        // Internationalization Hook
+        const useI18n = () => {
+            const [language, setLanguage] = useState('en');
+            
+            const translations = {
+                en: {
+                    // Navigation
+                    home: 'Home',
+                    profile: 'Profile',
+                    help: 'Help',
+                    rateUs: 'Rate Us',
+                    aboutUs: 'About Us',
+                    invitePeople: 'Invite People',
+                    
+                    // Main content
+                    appName: 'AFRICAN DEV\'T FUNDS',
+                    tagline: 'Apply now, Receive Funds now',
+                    mission: 'We support communities with development grants to spur opportunity and resilience.',
+                    notLoans: 'These are donations/free funds, not loans.',
+                    applyNow: 'Apply Now',
+                    whatsapp: 'WhatsApp',
+                    createAccount: 'Create Account',
+                    login: 'Login to Account',
+                    submit: 'Submit',
+                    redirecting: 'Redirecting to WhatsApp agent…',
+                    next: 'Next',
+                    back: 'Back',
+                    close: 'Close',
+                    
+                    // Form fields
+                    fullName: 'Full Name',
+                    phone: 'Phone Number',
+                    email: 'Email Address',
+                    age: 'Age',
+                    gender: 'Gender',
+                    country: 'Country',
+                    amount: 'Amount Needed',
+                    purpose: 'Purpose',
+                    
+                    // Gender options
+                    female: 'Female',
+                    male: 'Male',
+                    preferNotToSay: 'Prefer not to say',
+                    
+                    // Countries
+                    kenya: 'Kenya',
+                    tanzania: 'Tanzania',
+                    uganda: 'Uganda',
+                    rwanda: 'Rwanda',
+                    nigeria: 'Nigeria',
+                    ghana: 'Ghana',
+                    southAfrica: 'South Africa',
+                    other: 'Other',
+                    
+                    // Validation messages
+                    required: 'This field is required',
+                    invalidEmail: 'Please enter a valid email address',
+                    phoneFormat: 'Please enter a valid phone number',
+                    ageRange: 'Age must be between 18 and 75',
+                    amountRange: 'Amount must be between 50 and 100,000',
+                    minLength: 'Please provide more details (minimum 10 characters)',
+                    
+                    // Steps
+                    personalInfo: 'Personal Information',
+                    fundingDetails: 'Funding Details',
+                    reviewConsent: 'Review & Consent',
+                    
+                    // Review
+                    confirmAccuracy: 'Confirm Details',
+                    consentText: 'I confirm details are accurate and I understand these are donations/free funds.',
+                    
+                    // Success
+                    thankYou: 'Thank You!',
+                    applicationSubmitted: 'Your application has been submitted successfully.',
+                    
+                    // Testimonials
+                    testimonial1Name: 'Amina, 29, Kenya',
+                    testimonial1Text: 'Funding helped us start a water kiosk in Kisumu.',
+                    testimonial2Name: 'Joseph, 41, Tanzania',
+                    testimonial2Text: 'Support enabled our cooperative to buy tools.',
+                    testimonial3Name: 'Naledi, 34, South Africa',
+                    testimonial3Text: 'We grew our community garden.',
+                    
+                    // Languages
+                    english: 'English',
+                    swahili: 'Swahili',
+                    
+                    // Invite
+                    inviteText: 'Join AFRICAN DEV\'T FUNDS and apply for free development grants! No loans, just support for African communities.',
+                    copied: 'Copied to clipboard!',
+                },
+                sw: {
+                    // Navigation
+                    home: 'Nyumbani',
+                    profile: 'Wasifu',
+                    help: 'Msaada',
+                    rateUs: 'Tukadimu',
+                    aboutUs: 'Kuhusu Sisi',
+                    invitePeople: 'Alika Watu',
+                    
+                    // Main content
+                    appName: 'AFRICAN DEV\'T FUNDS',
+                    tagline: 'Omba sasa, Pokea Fedha sasa',
+                    mission: 'Tunaunga mkono jamii kwa ruzuku za maendeleo ili kuleta fursa na ustahimilivu.',
+                    notLoans: 'Hizi ni ruzuku/msaada wa bure, si mikopo.',
+                    applyNow: 'Omba Sasa',
+                    whatsapp: 'WhatsApp',
+                    createAccount: 'Fungua Akaunti',
+                    login: 'Ingia kwenye Akaunti',
+                    submit: 'Tuma',
+                    redirecting: 'Inakuelekeza kwa wakala wa WhatsApp…',
+                    next: 'Ifuatayo',
+                    back: 'Rudi',
+                    close: 'Funga',
+                    
+                    // Form fields
+                    fullName: 'Jina Kamili',
+                    phone: 'Nambari ya Simu',
+                    email: 'Anwani ya Barua Pepe',
+                    age: 'Umri',
+                    gender: 'Jinsia',
+                    country: 'Nchi',
+                    amount: 'Kiasi Kinachotakikana',
+                    purpose: 'Kusudi',
+                    
+                    // Gender options
+                    female: 'Mke',
+                    male: 'Mume',
+                    preferNotToSay: 'Sipendi kusema',
+                    
+                    // Countries
+                    kenya: 'Kenya',
+                    tanzania: 'Tanzania',
+                    uganda: 'Uganda',
+                    rwanda: 'Rwanda',
+                    nigeria: 'Nigeria',
+                    ghana: 'Ghana',
+                    southAfrica: 'Afrika Kusini',
+                    other: 'Nyingine',
+                    
+                    // Validation messages
+                    required: 'Sehemu hii inahitajika',
+                    invalidEmail: 'Tafadhali ingiza anwani sahihi ya barua pepe',
+                    phoneFormat: 'Tafadhali ingiza nambari sahihi ya simu',
+                    ageRange: 'Umri lazima uwe kati ya miaka 18 na 75',
+                    amountRange: 'Kiasi lazima kiwe kati ya 50 na 100,000',
+                    minLength: 'Tafadhali toa maelezo zaidi (angalau herufi 10)',
+                    
+                    // Steps
+                    personalInfo: 'Taarifa za Kibinafsi',
+                    fundingDetails: 'Maelezo ya Fedha',
+                    reviewConsent: 'Kagua na Idhini',
+                    
+                    // Review
+                    confirmAccuracy: 'Thibitisha Maelezo',
+                    consentText: 'Ninathibitisha kwamba maelezo ni sahihi na ninaelewa hizi ni ruzuku/msaada wa bure.',
+                    
+                    // Success
+                    thankYou: 'Asante!',
+                    applicationSubmitted: 'Ombi lako limetumwa kwa mafanikio.',
+                    
+                    // Testimonials
+                    testimonial1Name: 'Amina, 29, Kenya',
+                    testimonial1Text: 'Fedha zilisaidia tuanze kiosk cha maji Kisumu.',
+                    testimonial2Name: 'Joseph, 41, Tanzania',
+                    testimonial2Text: 'Msaada uliwezesha ushirika wetu kununua vifaa.',
+                    testimonial3Name: 'Naledi, 34, Afrika Kusini',
+                    testimonial3Text: 'Tulikua bustani yetu ya kijamii.',
+                    
+                    // Languages
+                    english: 'Kiingereza',
+                    swahili: 'Kiswahili',
+                    
+                    // Invite
+                    inviteText: 'Jiunge na AFRICAN DEV\'T FUNDS na uombe ruzuku za maendeleo za bure! Hakuna mikopo, ni msaada tu kwa jamii za Kiafrika.',
+                    copied: 'Imenakiliwa kwenye clipboard!',
+                },
+            };
+            
+            const t = useCallback((key) => {
+                return translations[language][key] || key;
+            }, [language]);
+            
+            return { language, setLanguage, t };
+        };
+        
+        // Form Hook
+        const useForm = () => {
+            const [formData, setFormData] = useState({
+                fullName: '',
+                phone: '',
+                email: '',
+                age: '',
+                gender: '',
+                country: '',
+                amount: '',
+                purpose: '',
+            });
+            
+            const [errors, setErrors] = useState({});
+            const [currentStep, setCurrentStep] = useState(1);
+            const [isConsentGiven, setIsConsentGiven] = useState(false);
+            
+            const updateField = useCallback((field, value) => {
+                setFormData(prev => ({ ...prev, [field]: value }));
+                if (errors[field]) {
+                    setErrors(prev => ({ ...prev, [field]: '' }));
+                }
+            }, [errors]);
+            
+            const validateEmail = (email) => {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            };
+            
+            const validatePhone = (phone) => {
+                const cleaned = phone.replace(/\D/g, '');
+                return cleaned.length >= 9 && cleaned.length <= 15;
+            };
+            
+            const validateStep1 = () => {
+                const stepErrors = {};
+                
+                if (!formData.fullName.trim()) {
+                    stepErrors.fullName = 'required';
+                } else if (formData.fullName.trim().split(' ').length < 2) {
+                    stepErrors.fullName = 'minLength';
+                }
+                
+                if (!formData.phone.trim()) {
+                    stepErrors.phone = 'required';
+                } else if (!validatePhone(formData.phone)) {
+                    stepErrors.phone = 'phoneFormat';
+                }
+                
+                if (!formData.email.trim()) {
+                    stepErrors.email = 'required';
+                } else if (!validateEmail(formData.email)) {
+                    stepErrors.email = 'invalidEmail';
+                }
+                
+                if (!formData.age.trim()) {
+                    stepErrors.age = 'required';
+                } else {
+                    const age = parseInt(formData.age);
+                    if (isNaN(age) || age < 18 || age > 75) {
+                        stepErrors.age = 'ageRange';
+                    }
+                }
+                
+                if (!formData.gender) {
+                    stepErrors.gender = 'required';
+                }
+                
+                if (!formData.country) {
+                    stepErrors.country = 'required';
+                }
+                
+                return stepErrors;
+            };
+            
+            const validateStep2 = () => {
+                const stepErrors = {};
+                
+                if (!formData.amount.trim()) {
+                    stepErrors.amount = 'required';
+                } else {
+                    const amount = parseFloat(formData.amount.replace(/,/g, ''));
+                    if (isNaN(amount) || amount < 50 || amount > 100000) {
+                        stepErrors.amount = 'amountRange';
+                    }
+                }
+                
+                if (!formData.purpose.trim()) {
+                    stepErrors.purpose = 'required';
+                } else if (formData.purpose.trim().length < 10) {
+                    stepErrors.purpose = 'minLength';
+                }
+                
+                return stepErrors;
+            };
+            
+            const validateCurrentStep = () => {
+                let stepErrors = {};
+                
+                switch (currentStep) {
+                    case 1:
+                        stepErrors = validateStep1();
+                        break;
+                    case 2:
+                        stepErrors = validateStep2();
+                        break;
+                    case 3:
+                        if (!isConsentGiven) {
+                            stepErrors.consent = 'required';
+                        }
+                        break;
+                }
+                
+                setErrors(stepErrors);
+                return Object.keys(stepErrors).length === 0;
+            };
+            
+            const nextStep = () => {
+                if (validateCurrentStep()) {
+                    setCurrentStep(prev => Math.min(prev + 1, 3));
+                    return true;
+                }
+                return false;
+            };
+            
+            const prevStep = () => {
+                setCurrentStep(prev => Math.max(prev - 1, 1));
+            };
+            
+            const formatAmount = (amount) => {
+                const cleaned = amount.replace(/,/g, '');
+                const number = parseFloat(cleaned);
+                if (isNaN(number)) return amount;
+                return number.toLocaleString();
+            };
+            
+            const generateWhatsAppMessage = () => {
+                const cleanPhone = formData.phone.replace(/\D/g, '');
+                const cleanAmount = formData.amount.replace(/,/g, '');
+                
+                return `Hello! I've submitted an application through African Dev't Funds.
+
+Full Name: ${formData.fullName}
+Country: ${formData.country}
+Phone: ${cleanPhone}
+Email: ${formData.email}
+Amount Needed: $${cleanAmount}
+Purpose: ${formData.purpose}
+
+I understand these are donations/free funds, not loans. Please assist me with my application.`;
+            };
+            
+            const reset = () => {
+                setFormData({
+                    fullName: '',
+                    phone: '',
+                    email: '',
+                    age: '',
+                    gender: '',
+                    country: '',
+                    amount: '',
+                    purpose: '',
+                });
+                setErrors({});
+                setCurrentStep(1);
+                setIsConsentGiven(false);
+            };
+            
+            return {
+                formData,
+                errors,
+                currentStep,
+                isConsentGiven,
+                updateField,
+                setCurrentStep,
+                setIsConsentGiven,
+                validateCurrentStep,
+                nextStep,
+                prevStep,
+                formatAmount,
+                generateWhatsAppMessage,
+                reset,
+            };
+        };
+        
+        // Toast Component
+        const Toast = ({ message, type, show, onClose }) => {
+            useEffect(() => {
+                if (show) {
+                    const timer = setTimeout(onClose, 3000);
+                    return () => clearTimeout(timer);
+                }
+            }, [show, onClose]);
+            
+            return (
+                <div className={`toast ${type} ${show ? 'show' : ''}`}>
+                    {message}
+                </div>
+            );
+        };
+        
+        // Language Selector Component
+        const LanguageSelector = ({ language, setLanguage, t }) => {
+            return (
+                <div className="language-selector">
+                    <button
+                        className={`language-btn ${language === 'en' ? 'active' : ''}`}
+                        onClick={() => setLanguage('en')}
+                    >
+                        {t('english')}
+                    </button>
+                    <button
+                        className={`language-btn ${language === 'sw' ? 'active' : ''}`}
+                        onClick={() => setLanguage('sw')}
+                    >
+                        {t('swahili')}
+                    </button>
+                </div>
+            );
+        };
+        
+        // Testimonials Component
+        const Testimonials = ({ t }) => {
+            const [currentTestimonial, setCurrentTestimonial] = useState(0);
+            
+            const testimonials = [
+                { name: t('testimonial1Name'), text: t('testimonial1Text') },
+                { name: t('testimonial2Name'), text: t('testimonial2Text') },
+                { name: t('testimonial3Name'), text: t('testimonial3Text') },
+            ];
+            
+            useEffect(() => {
+                const timer = setInterval(() => {
+                    setCurrentTestimonial(prev => (prev + 1) % testimonials.length);
+                }, 5000);
+                return () => clearInterval(timer);
+            }, [testimonials.length]);
+            
+            return (
+                <div className="testimonials">
+                    <div className="testimonial">
+                        <div className="testimonial-text">"{testimonials[currentTestimonial].text}"</div>
+                        <div className="testimonial-author">{testimonials[currentTestimonial].name}</div>
+                    </div>
+                </div>
+            );
+        };
+        
+        // Form Steps Component
+        const FormSteps = ({ currentStep, t }) => {
+            const steps = [
+                { number: 1, label: t('personalInfo') },
+                { number: 2, label: t('fundingDetails') },
+                { number: 3, label: t('reviewConsent') },
+            ];
+            
+            return (
+                <div className="steps">
+                    {steps.map((step) => (
+                        <div
+                            key={step.number}
+                            className={`step ${currentStep === step.number ? 'active' : ''} ${currentStep > step.number ? 'completed' : ''}`}
+                        >
+                            <div className="step-number">
+                                {currentStep > step.number ? (
+                                    <ion-icon name="checkmark"></ion-icon>
+                                ) : (
+                                    step.number
+                                )}
+                            </div>
+                            <div className="step-label">{step.label}</div>
+                        </div>
+                    ))}
+                </div>
+            );
+        };
+        
+        // Form Step 1 Component
+        const FormStep1 = ({ formData, errors, updateField, t }) => {
+            const genderOptions = [
+                { value: 'female', label: t('female') },
+                { value: 'male', label: t('male') },
+                { value: 'preferNotToSay', label: t('preferNotToSay') },
+            ];
+            
+            const countryOptions = [
+                { value: 'kenya', label: t('kenya') },
+                { value: 'tanzania', label: t('tanzania') },
+                { value: 'uganda', label: t('uganda') },
+                { value: 'rwanda', label: t('rwanda') },
+                { value: 'nigeria', label: t('nigeria') },
+                { value: 'ghana', label: t('ghana') },
+                { value: 'southAfrica', label: t('southAfrica') },
+                { value: 'other', label: t('other') },
+            ];
+            
+            return (
+                <div>
+                    <div className="form-group">
+                        <label className="form-label" htmlFor="fullName">{t('fullName')}</label>
+                        <input
+                            id="fullName"
+                            type="text"
+                            className={`form-input ${errors.fullName ? 'error' : ''}`}
+                            value={formData.fullName}
+                            onChange={(e) => updateField('fullName', e.target.value)}
+                            placeholder="Enter your full name"
+                        />
+                        {errors.fullName && (
+                            <div className="form-error">{t(errors.fullName)}</div>
+                        )}
+                    </div>
+                    
+                    <div className="form-group">
+                        <label className="form-label" htmlFor="phone">{t('phone')}</label>
+                        <input
+                            id="phone"
+                            type="tel"
+                            className={`form-input ${errors.phone ? 'error' : ''}`}
+                            value={formData.phone}
+                            onChange={(e) => updateField('phone', e.target.value)}
+                            placeholder="+254 712 345 678"
+                        />
+                        <div className="form-hint">Example: +254 712 345 678 or 0712345678</div>
+                        {errors.phone && (
+                            <div className="form-error">{t(errors.phone)}</div>
+                        )}
+                    </div>
+                    
+                    <div className="form-group">
+                        <label className="form-label" htmlFor="email">{t('email')}</label>
+                        <input
+                            id="email"
+                            type="email"
+                            className={`form-input ${errors.email ? 'error' : ''}`}
+                            value={formData.email}
+                            onChange={(e) => updateField('email', e.target.value)}
+                            placeholder="your.email@example.com"
+                        />
+                        {errors.email && (
+                            <div className="form-error">{t(errors.email)}</div>
+                        )}
+                    </div>
+                    
+                    <div className="form-group">
+                        <label className="form-label" htmlFor="age">{t('age')}</label>
+                        <input
+                            id="age"
+                            type="number"
+                            className={`form-input ${errors.age ? 'error' : ''}`}
+                            value={formData.age}
+                            onChange={(e) => updateField('age', e.target.value)}
+                            min="18"
+                            max="75"
+                            placeholder="25"
+                        />
+                        {errors.age && (
+                            <div className="form-error">{t(errors.age)}</div>
+                        )}
+                    </div>
+                    
+                    <div className="form-group">
+                        <label className="form-label" htmlFor="gender">{t('gender')}</label>
+                        <select
+                            id="gender"
+                            className={`form-select ${errors.gender ? 'error' : ''}`}
+                            value={formData.gender}
+                            onChange={(e) => updateField('gender', e.target.value)}
+                        >
+                            <option value="">Select gender</option>
+                            {genderOptions.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                    {option.label}
+                                </option>
+                            ))}
+                        </select>
+                        {errors.gender && (
+                            <div className="form-error">{t(errors.gender)}</div>
+                        )}
+                    </div>
+                    
+                    <div className="form-group">
+                        <label className="form-label" htmlFor="country">{t('country')}</label>
+                        <select
+                            id="country"
+                            className={`form-select ${errors.country ? 'error' : ''}`}
+                            value={formData.country}
+                            onChange={(e) => updateField('country', e.target.value)}
+                        >
+                            <option value="">Select country</option>
+                            {countryOptions.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                    {option.label}
+                                </option>
+                            ))}
+                        </select>
+                        {errors.country && (
+                            <div className="form-error">{t(errors.country)}</div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+        
+        // Form Step 2 Component
+        const FormStep2 = ({ formData, errors, updateField, formatAmount, t }) => {
+            const handleAmountBlur = (e) => {
+                const formatted = formatAmount(e.target.value);
+                updateField('amount', formatted);
+            };
+            
+            return (
+                <div>
+                    <div className="form-group">
+                        <label className="form-label" htmlFor="amount">{t('amount')} ($)</label>
+                        <input
+                            id="amount"
+                            type="text"
+                            className={`form-input ${errors.amount ? 'error' : ''}`}
+                            value={formData.amount}
+                            onChange={(e) => updateField('amount', e.target.value.replace(/[^0-9,]/g, ''))}
+                            onBlur={handleAmountBlur}
+                            placeholder="1,000"
+                        />
+                        <div className="form-hint">Amount between $50 and $100,000</div>
+                        {errors.amount && (
+                            <div className="form-error">{t(errors.amount)}</div>
+                        )}
+                    </div>
+                    
+                    <div className="form-group">
+                        <label className="form-label" htmlFor="purpose">{t('purpose')}</label>
+                        <textarea
+                            id="purpose"
+                            className={`form-textarea ${errors.purpose ? 'error' : ''}`}
+                            value={formData.purpose}
+                            onChange={(e) => updateField('purpose', e.target.value)}
+                            placeholder="Describe how you plan to use the funds..."
+                            rows="4"
+                        />
+                        <div className="form-hint">Minimum 10 characters</div>
+                        {errors.purpose && (
+                            <div className="form-error">{t(errors.purpose)}</div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+        
+        // Form Step 3 Component
+        const FormStep3 = ({ formData, errors, isConsentGiven, setIsConsentGiven, t }) => {
+            const genderLabels = {
+                female: t('female'),
+                male: t('male'),
+                preferNotToSay: t('preferNotToSay'),
+            };
+            
+            const countryLabels = {
+                kenya: t('kenya'),
+                tanzania: t('tanzania'),
+                uganda: t('uganda'),
+                rwanda: t('rwanda'),
+                nigeria: t('nigeria'),
+                ghana: t('ghana'),
+                southAfrica: t('southAfrica'),
+                other: t('other'),
+            };
+            
+            return (
+                <div>
+                    <div className="summary">
+                        <h3 style={{ marginBottom: '1rem', color: 'var(--primary)' }}>{t('confirmAccuracy')}</h3>
+                        
+                        <div className="summary-item">
+                            <span className="summary-label">{t('fullName')}:</span>
+                            <span className="summary-value">{formData.fullName}</span>
+                        </div>
+                        
+                        <div className="summary-item">
+                            <span className="summary-label">{t('phone')}:</span>
+                            <span className="summary-value">{formData.phone}</span>
+                        </div>
+                        
+                        <div className="summary-item">
+                            <span className="summary-label">{t('email')}:</span>
+                            <span className="summary-value">{formData.email}</span>
+                        </div>
+                        
+                        <div className="summary-item">
+                            <span className="summary-label">{t('age')}:</span>
+                            <span className="summary-value">{formData.age}</span>
+                        </div>
+                        
+                        <div className="summary-item">
+                            <span className="summary-label">{t('gender')}:</span>
+                            <span className="summary-value">{genderLabels[formData.gender]}</span>
+                        </div>
+                        
+                        <div className="summary-item">
+                            <span className="summary-label">{t('country')}:</span>
+                            <span className="summary-value">{countryLabels[formData.country]}</span>
+                        </div>
+                        
+                        <div className="summary-item">
+                            <span className="summary-label">{t('amount')}:</span>
+                            <span className="summary-value">${formData.amount}</span>
+                        </div>
+                        
+                        <div className="summary-item">
+                            <span className="summary-label">{t('purpose')}:</span>
+                            <span className="summary-value" style={{ textAlign: 'right', maxWidth: '60%' }}>
+                                {formData.purpose}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div className="checkbox-group">
+                        <input
+                            id="consent"
+                            type="checkbox"
+                            className="checkbox"
+                            checked={isConsentGiven}
+                            onChange={(e) => setIsConsentGiven(e.target.checked)}
+                        />
+                        <label htmlFor="consent" className="checkbox-label">
+                            {t('consentText')}
+                        </label>
+                    </div>
+                    
+                    {errors.consent && (
+                        <div className="form-error" style={{ marginTop: '0.5rem' }}>
+                            {t(errors.consent)}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+        
+        // Header Component
+        const Header = ({ onMenuClick, onAccountClick, t }) => {
+            return (
+                <header className="header">
+                    <div className="header-left">
+                        <button className="icon-button" onClick={onMenuClick} aria-label="Menu">
+                            <ion-icon name="menu"></ion-icon>
+                        </button>
+                    </div>
+                    
+                    <div className="header-center">
+                        <div className="logo">{t('appName')}</div>
+                        <div className="tagline">{t('tagline')}</div>
+                    </div>
+                    
+                    <div className="header-right">
+                        <button className="icon-button" onClick={onAccountClick} aria-label="Account">
+                            <ion-icon name="person-circle"></ion-icon>
+                        </button>
+                    </div>
+                </header>
+            );
+        };
+        
+        // Sidebar Component
+        const Sidebar = ({ isOpen, onClose, onInvite, t }) => {
+            useEffect(() => {
+                if (isOpen) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = 'unset';
+                }
+                
+                return () => {
+                    document.body.style.overflow = 'unset';
+                };
+            }, [isOpen]);
+            
+            return (
+                <>
+                    <div className={`sidebar-overlay ${isOpen ? 'open' : ''}`} onClick={onClose}></div>
+                    <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
+                        <div className="sidebar-header">
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <ion-icon name="person-circle" style={{ fontSize: '2rem', color: 'var(--primary)' }}></ion-icon>
+                                <div>
+                                    <div style={{ fontWeight: 'bold' }}>Guest</div>
+                                    <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Welcome</div>
+                                </div>
+                            </div>
+                            <button className="icon-button" onClick={onClose} aria-label="Close">
+                                <ion-icon name="close"></ion-icon>
+                            </button>
+                        </div>
+                        
+                        <div className="sidebar-content">
+                            <div className="sidebar-section">
+                                <ul className="sidebar-menu">
+                                    <li>
+                                        <a href="#" className="sidebar-link">
+                                            <ion-icon name="home"></ion-icon>
+                                            <span>{t('home')}</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" className="sidebar-link">
+                                            <ion-icon name="person"></ion-icon>
+                                            <span>{t('profile')}</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" className="sidebar-link">
+                                            <ion-icon name="help-circle"></ion-icon>
+                                            <span>{t('help')}</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" className="sidebar-link">
+                                            <ion-icon name="star"></ion-icon>
+                                            <span>{t('rateUs')}</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" className="sidebar-link">
+                                            <ion-icon name="information-circle"></ion-icon>
+                                            <span>{t('aboutUs')}</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" className="sidebar-link" onClick={onInvite}>
+                                            <ion-icon name="share"></ion-icon>
+                                            <span>{t('invitePeople')}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </aside>
+                </>
+            );
+        };
+        
+        // Welcome View Component
+        const WelcomeView = ({ onApplyNow, onWhatsApp, language, setLanguage, t }) => {
+            return (
+                <div className="card">
+                    <LanguageSelector language={language} setLanguage={setLanguage} t={t} />
+                    
+                    <div className="card-header">
+                        <h1 className="card-title">{t('appName')}</h1>
+                        <p className="card-subtitle">{t('mission')}</p>
+                    </div>
+                    
+                    <div className="alert">
+                        <div className="alert-content">
+                            <ion-icon name="information-circle" className="alert-icon"></ion-icon>
+                            <strong>{t('notLoans')}</strong>
+                        </div>
+                    </div>
+                    
+                    <Testimonials t={t} />
+                    
+                    <div className="btn-group">
+                        <button className="btn btn-primary" onClick={onApplyNow}>
+                            <ion-icon name="document-text"></ion-icon>
+                            {t('applyNow')}
+                        </button>
+                        <button className="btn btn-secondary" onClick={onWhatsApp}>
+                            <ion-icon name="logo-whatsapp"></ion-icon>
+                            {t('whatsapp')}
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+        
+        // Account Access View Component
+        const AccountAccessView = ({ onCreateAccount, onLogin, t }) => {
+            return (
+                <div className="card">
+                    <div className="card-header">
+                        <h2 className="card-title">Account Access</h2>
+                    </div>
+                    
+                    <div className="alert">
+                        <div className="alert-content">
+                            <ion-icon name="gift" className="alert-icon"></ion-icon>
+                            <strong>{t('notLoans')}</strong>
+                        </div>
+                    </div>
+                    
+                    <div className="btn-group">
+                        <button className="btn btn-primary" onClick={onCreateAccount}>
+                            <ion-icon name="person-add"></ion-icon>
+                            {t('createAccount')}
+                        </button>
+                        <button className="btn btn-outline" onClick={onLogin}>
+                            <ion-icon name="log-in"></ion-icon>
+                            {t('login')}
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+        
+        // Application Form View Component
+        const ApplicationFormView = ({ formData, errors, currentStep, isConsentGiven, setIsConsentGiven, updateField, nextStep, prevStep, formatAmount, onSubmit, t }) => {
+            const canProceed = () => {
+                switch (currentStep) {
+                    case 1:
+                        return formData.fullName && formData.phone && formData.email && formData.age && formData.gender && formData.country;
+                    case 2:
+                        return formData.amount && formData.purpose && formData.purpose.length >= 10;
+                    case 3:
+                        return isConsentGiven;
+                    default:
+                        return false;
+                }
+            };
+            
+            const handleNext = () => {
+                if (currentStep === 3) {
+                    onSubmit();
+                } else {
+                    nextStep();
+                }
+            };
+            
+            return (
+                <div className="card">
+                    <div className="card-header">
+                        <h2 className="card-title">Application Form</h2>
+                    </div>
+                    
+                    <FormSteps currentStep={currentStep} t={t} />
+                    
+                    {currentStep === 1 && (
+                        <FormStep1 formData={formData} errors={errors} updateField={updateField} t={t} />
+                    )}
+                    
+                    {currentStep === 2 && (
+                        <FormStep2 formData={formData} errors={errors} updateField={updateField} formatAmount={formatAmount} t={t} />
+                    )}
+                    
+                    {currentStep === 3 && (
+                        <FormStep3 formData={formData} errors={errors} isConsentGiven={isConsentGiven} setIsConsentGiven={setIsConsentGiven} t={t} />
+                    )}
+                    
+                    <div className="form-nav">
+                        <button
+                            className="btn btn-outline"
+                            onClick={prevStep}
+                            disabled={currentStep === 1}
+                        >
+                            <ion-icon name="arrow-back"></ion-icon>
+                            {t('back')}
+                        </button>
+                        
+                        <button
+                            className="btn btn-primary"
+                            onClick={handleNext}
+                            disabled={!canProceed()}
+                        >
+                            {currentStep === 3 ? t('submit') : t('next')}
+                            <ion-icon name={currentStep === 3 ? "checkmark" : "arrow-forward"}></ion-icon>
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+        
+        // Agent Redirect View Component
+        const AgentRedirectView = ({ onWhatsAppRedirect, t }) => {
+            const [countdown, setCountdown] = useState(3);
+            
+            useEffect(() => {
+                const timer = setInterval(() => {
+                    setCountdown(prev => {
+                        if (prev <= 1) {
+                            clearInterval(timer);
+                            onWhatsAppRedirect();
+                            return 0;
+                        }
+                        return prev - 1;
+                    });
+                }, 1000);
+                
+                return () => clearInterval(timer);
+            }, [onWhatsAppRedirect]);
+            
+            return (
+                <div className="card">
+                    <div className="loading-container">
+                        <ion-icon name="checkmark-circle" style={{ fontSize: '4rem', color: 'var(--primary)' }}></ion-icon>
+                        <h2 className="card-title">{t('thankYou')}</h2>
+                        <p className="card-subtitle">{t('applicationSubmitted')}</p>
+                        
+                        <div style={{ margin: '2rem 0' }}>
+                            <div className="spinner"></div>
+                            <p style={{ marginTop: '1rem', color: 'var(--text-secondary)' }}>
+                                {t('redirecting')} ({countdown}s)
+                            </p>
+                        </div>
+                        
+                        <button className="btn btn-secondary" onClick={onWhatsAppRedirect}>
+                            <ion-icon name="logo-whatsapp"></ion-icon>
+                            {t('whatsapp')} Now
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+        
+        // Main App Component
+        const App = () => {
+            const { language, setLanguage, t } = useI18n();
+            const { formData, errors, currentStep, isConsentGiven, updateField, setCurrentStep, setIsConsentGiven, validateCurrentStep, nextStep, prevStep, formatAmount, generateWhatsAppMessage, reset } = useForm();
+            
+            const [currentView, setCurrentView] = useState('WELCOME');
+            const [sidebarOpen, setSidebarOpen] = useState(false);
+            const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+            
+            const showToast = (message, type = 'success') => {
+                setToast({ show: true, message, type });
+            };
+            
+            const hideToast = () => {
+                setToast({ show: false, message: '', type: 'success' });
+            };
+            
+            const handleWhatsAppRedirect = useCallback(() => {
+                const message = generateWhatsAppMessage();
+                const whatsappUrl = `https://wa.me/255780361330?text=${encodeURIComponent(message)}`;
+                
+                try {
+                    window.open(whatsappUrl, '_blank');
+                } catch (error) {
+                    // Fallback for pop-up blockers
+                    showToast('Please click the WhatsApp button to continue', 'error');
+                }
+            }, [generateWhatsAppMessage]);
+            
+            const handleSubmit = () => {
+                if (validateCurrentStep()) {
+                    setCurrentView('AGENT_REDIRECT');
+                }
+            };
+            
+            const handleInvite = () => {
+                const inviteText = t('inviteText');
+                
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(inviteText).then(() => {
+                        showToast(t('copied'));
+                    }).catch(() => {
+                        showToast('Unable to copy to clipboard', 'error');
+                    });
+                } else {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = inviteText;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        showToast(t('copied'));
+                    } catch (err) {
+                        showToast('Unable to copy to clipboard', 'error');
+                    }
+                    document.body.removeChild(textArea);
+                }
+                
+                setSidebarOpen(false);
+            };
+            
+            const renderCurrentView = () => {
+                switch (currentView) {
+                    case 'WELCOME':
+                        return (
+                            <WelcomeView
+                                onApplyNow={() => setCurrentView('ACCOUNT')}
+                                onWhatsApp={handleWhatsAppRedirect}
+                                language={language}
+                                setLanguage={setLanguage}
+                                t={t}
+                            />
+                        );
+                    
+                    case 'ACCOUNT':
+                        return (
+                            <AccountAccessView
+                                onCreateAccount={() => setCurrentView('FORM')}
+                                onLogin={() => setCurrentView('FORM')}
+                                t={t}
+                            />
+                        );
+                    
+                    case 'FORM':
+                        return (
+                            <ApplicationFormView
+                                formData={formData}
+                                errors={errors}
+                                currentStep={currentStep}
+                                isConsentGiven={isConsentGiven}
+                                setIsConsentGiven={setIsConsentGiven}
+                                updateField={updateField}
+                                nextStep={nextStep}
+                                prevStep={prevStep}
+                                formatAmount={formatAmount}
+                                onSubmit={handleSubmit}
+                                t={t}
+                            />
+                        );
+                    
+                    case 'AGENT_REDIRECT':
+                        return (
+                            <AgentRedirectView
+                                onWhatsAppRedirect={handleWhatsAppRedirect}
+                                t={t}
+                            />
+                        );
+                    
+                    default:
+                        return null;
+                }
+            };
+            
+            return (
+                <div className="app">
+                    <Header
+                        onMenuClick={() => setSidebarOpen(true)}
+                        onAccountClick={() => setCurrentView('ACCOUNT')}
+                        t={t}
+                    />
+                    
+                    <Sidebar
+                        isOpen={sidebarOpen}
+                        onClose={() => setSidebarOpen(false)}
+                        onInvite={handleInvite}
+                        t={t}
+                    />
+                    
+                    <main className="main">
+                        {renderCurrentView()}
+                    </main>
+                    
+                    <Toast
+                        message={toast.message}
+                        type={toast.type}
+                        show={toast.show}
+                        onClose={hideToast}
+                    />
+                </div>
+            );
+        };
+        
+        // Render the app
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
